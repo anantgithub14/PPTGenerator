@@ -12,7 +12,6 @@ C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\ob
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.pdb
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\bin\Debug\PPTGenerator.exe
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\bin\Debug\PPTGenerator.pdb
-C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.csprojResolveAssemblyReference.cache
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.Properties.Resources.resources
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.csproj.GenerateResource.Cache
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.FormPPTGenerator.resources

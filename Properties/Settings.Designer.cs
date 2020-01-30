@@ -31,5 +31,14 @@ namespace PPTGenerator.Properties {
                 return ((string)(this["DefaultDirectory"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("IPM Ship_Name - Ship_Mnemonic Client PPT")]
+        public string FileNameFormat {
+            get {
+                return ((string)(this["FileNameFormat"]));
+            }
+        }
     }
 }

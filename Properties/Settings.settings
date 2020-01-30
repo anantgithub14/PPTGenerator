@@ -5,5 +5,8 @@
     <Setting Name="DefaultDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\</Value>
     </Setting>
+    <Setting Name="FileNameFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">IPM Ship_Name - Ship_Mnemonic Client PPT</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
