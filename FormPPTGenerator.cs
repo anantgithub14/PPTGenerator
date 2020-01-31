@@ -93,35 +93,31 @@ namespace PPTGenerator
                     pp = new Microsoft.Office.Interop.PowerPoint.Application();
                     document = ap.Documents.Open(txtWordFilePath.Text,ReadOnly:false );
 
-
                     Microsoft.Office.Interop.PowerPoint.Presentation objShow;
                     var pres = pp.Presentations;
                     objShow = pres.Open(txtPPTFilePath.Text);
-                    
-                    
-                                       
 
                     int i = 1;
-
 
                     foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
                     {
                         if (layout.Name.Equals("Front Main Page"))
                         {
-                            objShow.Slides.AddSlide(i, layout);
-
-                            foreach (Microsoft.Office.Interop.PowerPoint.Shape shape in objShow.Slides[i].Shapes)
+                            
+                            foreach (Microsoft.Office.Interop.PowerPoint.Shape shape in layout.Shapes)
                             {
                                 foreach (ContentControl cc in document.ContentControls)
                                 {
-                                    if (shape.TextFrame.TextRange.Text.Trim() == cc.Tag.Trim())
+                                    if (shape.Name.Trim() == cc.Tag.Trim())
                                     {
                                         shape.TextFrame.TextRange.Text = cc.XMLMapping.CustomXMLNode.FirstChild.NodeValue;
                                         break;
                                     }
                                 }
                             }
-                            
+
+                            objShow.Slides.AddSlide(i, layout);
+
                             i++;
                             break;
                         }
@@ -130,59 +126,22 @@ namespace PPTGenerator
 
                     foreach (ContentControl cc in document.ContentControls)
                     {
-                        switch(cc.Tag.Trim())
-                        {
-                            case "Section_Name_01":
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Section_Page_01"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
 
-                                        objShow.Slides[i].Shapes[1].TextFrame.TextRange.Text = cc.Range.Text;
-                                        i++;
-                                        break;
-                                    }
-                                }
-                                
-                                break;
-                            case "Section_Name_02":
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
+                        if(cc.Tag.Contains("Section_Name"))
+                        {
+                            foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
+                            {
+                                if (layout.Name.Equals("Section_Page_" + cc.Tag.Trim().Substring(cc.Tag.Trim().Length-2)))
                                 {
-                                    if (layout.Name.Equals("Section_Page_02"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        objShow.Slides[i].Shapes[1].TextFrame.TextRange.Text = cc.Range.Text;
-                                        i++;
-                                        break;
-                                    }
+                                    objShow.Slides.AddSlide(i, layout);
+
+                                    objShow.Slides[i].Shapes[1].TextFrame.TextRange.Text = cc.Range.Text;
+                                    i++;
+                                    break;
                                 }
-                                break;
-                            case "Section_Name_03":
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Section_Page_03"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        objShow.Slides[i].Shapes[1].TextFrame.TextRange.Text = cc.Range.Text;
-                                        i++;
-                                        break;
-                                    }
-                                }
-                                break;
-                            case "Section_Name_04":
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Section_Page_04"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        objShow.Slides[i].Shapes[1].TextFrame.TextRange.Text = cc.Range.Text;
-                                        i++;
-                                        break;
-                                    }
-                                }
-                                break;
+                            }
                         }
+
                         
                         if (cc.Tag.Contains("PP_Heading"))
                         {                            
@@ -201,91 +160,27 @@ namespace PPTGenerator
                             Sections.pictureType = cc.Range.Text.Trim();
                         }
                         else if (cc.Tag.Contains("PP_Picture"))
-                        {
-                            
-                            if(Sections.repeat == "R" && Sections.pictureType == "L")
-                            {
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Picture Details Landscape Repeat"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);                                        
-                                        i++;
-                                        break;
-                                    }
-                                }                                
-                            }
-                            else if(Sections.repeat == "R" && Sections.pictureType == "P")
-                            {
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Picture Details Portrait Repeat"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        i++;
-                                        break;
-                                    }
-                                }                                
-                            }
-                            else if (Sections.repeat == "R" && Sections.pictureType == "NP")
-                            {
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Picture Details Landscape NP Repeat"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        i++;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (Sections.repeat == "N/A" && Sections.pictureType == "L")
-                            {
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Picture Details Landscape"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
+                        {                           
 
-                                        foreach(Microsoft.Office.Interop.PowerPoint.Shape shape in objShow.Slides[i].Shapes)
-                                        {
-                                            if (shape.Title == "Header") shape.TextFrame.TextRange.Text = Sections.pictureHeading;
-                                            if(shape.Title == "Left") shape.TextFrame.TextRange.Text = Sections.explanatoryText;
-                                            
+                            foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
+                            {
+                                if (layout.Name.Equals("Template_" + Sections.repeat + "_" + Sections.pictureType))
+                                {
+                                    foreach (Microsoft.Office.Interop.PowerPoint.Shape shape in layout.Shapes)
+                                    {
+                                        if (shape.Name.Contains("Heading")) shape.TextFrame.TextRange.Text = Sections.pictureHeading;
+                                        if (shape.Name.Contains("Descriptive")) shape.TextFrame.TextRange.Text = Sections.explanatoryText;
+                                        if (shape.Name.Equals("Picture")) {
+                                            cc.Copy(); shape.TextFrame.TextRange.Paste(); break;                                            
                                         }
-
-                                        i++;
-                                        break;
+                                      
                                     }
+
+                                    objShow.Slides.AddSlide(i, layout);
+                                    i++;
+                                    break;
                                 }
                             }
-                            else if (Sections.repeat == "N/A" && Sections.pictureType == "P")
-                            {
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Picture Details Portrait"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        i++;
-                                        break;
-                                    }
-                                }
-                            }
-                            else if (Sections.repeat == "N/A" && Sections.pictureType == "NP")
-                            {
-                                foreach (CustomLayout layout in objShow.SlideMaster.CustomLayouts)
-                                {
-                                    if (layout.Name.Equals("Picture Details Landscape NP"))
-                                    {
-                                        objShow.Slides.AddSlide(i, layout);
-                                        i++;
-                                        break;
-                                    }
-                                }
-                            }
-
-
-
                         }
 
                                     

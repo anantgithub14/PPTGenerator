@@ -15,3 +15,4 @@ C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\bi
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.Properties.Resources.resources
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.csproj.GenerateResource.Cache
 C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.FormPPTGenerator.resources
+C:\Personal\Anant\Organization\Kiaan Software\Freelancer\GrahamH\PPTGenerator\obj\Debug\PPTGenerator.csprojResolveAssemblyReference.cache
