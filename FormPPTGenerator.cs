@@ -78,8 +78,8 @@ namespace PPTGenerator
             Microsoft.Office.Interop.PowerPoint.Application pp;
             Document document;
             btnPPTGenerator.Enabled = false;
+            FileInfo fi = new FileInfo(txtPPTFilePath.Text);
 
-            
 
             if (string.IsNullOrEmpty(txtWordFilePath.Text) || string.IsNullOrEmpty(txtPPTFilePath.Text))
             {
@@ -108,7 +108,7 @@ namespace PPTGenerator
                     {
                         if (layout.Name.Equals("Front Main Page"))
                         {
-                            
+
                             foreach (Microsoft.Office.Interop.PowerPoint.Shape shape in layout.Shapes)
                             {
                                 foreach (ContentControl cc in document.ContentControls)
@@ -217,8 +217,32 @@ namespace PPTGenerator
                                         if (shape.Name.Contains("Descriptive")) shape.TextFrame.TextRange.Text = Sections.explanatoryText;
 
                                         if (shape.Name.Equals("Picture")) {
-                                            cc.Copy();
-                                            layout.Shapes.Paste();                                                                                      
+                                            shape.TextFrame.TextRange.Text = string.Empty;
+                                            foreach(InlineShape s in cc.Range.InlineShapes)
+                                            {
+                                                s.Select();
+                                                ap.Selection.Copy();
+
+                                                // Check data is in the clipboard
+                                                if (Clipboard.GetDataObject() != null)
+                                                {
+                                                    var data = Clipboard.GetDataObject();
+
+                                                    // Check if the data conforms to a bitmap format
+                                                    if (data != null && data.GetDataPresent(DataFormats.Bitmap))
+                                                    {
+                                                        // Fetch the image and convert it to a Bitmap
+                                                        var image = (Image)data.GetData(DataFormats.Bitmap, true);
+                                                        var currentBitmap = new Bitmap(image);
+
+                                                        // Save the bitmap to a file
+                                                        currentBitmap.Save(fi.DirectoryName + "\\Picture.bmp");
+                                                        break;
+                                                    }
+                                                }                                                                                             
+                                            }
+                                            layout.Shapes.AddPicture(fi.DirectoryName + "\\Picture.bmp", Microsoft.Office.Core.MsoTriState.msoTrue, Microsoft.Office.Core.MsoTriState.msoTrue, shape.Left, shape.Top, shape.Width, shape.Height);
+                                            File.Delete(fi.DirectoryName + "\\Picture.bmp");
                                         }                                        
                                     }
                                     
@@ -233,7 +257,7 @@ namespace PPTGenerator
                                     
                     }
                     document.Close();
-                    FileInfo fi = new FileInfo(txtPPTFilePath.Text);                    
+                    
                     string DateString = System.DateTime.Now.Year.ToString() + " - " + System.DateTime.Now.Month.ToString() + " - " + System.DateTime.Now.Day.ToString();
                     //string newFileName = Properties.Settings.Default.FileNameFormat + " " + "(" + DateString + ").pptx";
                     string newFileName = "IPM  " + shipName + " - " + shipMnemonic + " Client PPT (" + audit_Date_To + ").pptx";
